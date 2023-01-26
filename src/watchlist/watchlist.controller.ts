@@ -1,16 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { Body, Param, Patch, Post } from '@nestjs/common/decorators';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Body, HttpCode, Param, Patch, Post } from '@nestjs/common/decorators';
 import { Delete } from '@nestjs/common/decorators/http/request-mapping.decorator';
+import { ApiTags } from '@nestjs/swagger/dist';
 import { AddTokensToWatchListDto } from './dto/add-tokens-to-watchlist.dto';
 import { CreateWatchlistDto } from './dto/create-watchlist.dto';
 import { DeleteTokensFromWatchListDto } from './dto/delete-tokens-from-watchlist.dto';
 import { WatchlistService } from './watchlist.service';
-
+@ApiTags('watchlist')
 @Controller('watchlist')
 export class WatchlistController {
     constructor(private watchListService: WatchlistService) { }
 
     @Get('coins') //2.1
+
     async getMasterCoinList() {
         return {
             coins: await this.watchListService.getMasterCoinList(),
@@ -38,6 +40,7 @@ export class WatchlistController {
         return await this.watchListService.getWatchListById(id);
     }
 
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Delete(':id') // 2.6
     async deleteWatchListById(@Param('id') id: string) {
         return await this.watchListService.deleteWatchListById(id);

@@ -1,10 +1,15 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { BalanceService } from './balance.service';
 
+@ApiTags('balance')
 @Controller('balance')
 export class BalanceController {
     constructor(private balanceService: BalanceService) { }
 
+    @ApiOkResponse({
+        description: 'The aggregate token balances of an address in the following chains: Ethereum, Fantom, and Polygon returned.'
+    })
     @Get(':address') // So this is wrong, they probably expected a POST request with the address in the body of the POST request.
     async getBalnce(@Param('address') address: string) {
         // 1 - ETH, 137 - MATIC TOKEN, 250 - FANTOM
